@@ -1,0 +1,32 @@
+body,
+html {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+table.main-table {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  border: 1px solid black;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+td.main-table {
+  vertical-align: top;
+  border-left: 1px solid #000;
+  border-right: 1px solid #000;
+}
+
+#scrollable-list {
+  overflow: auto;
+  border: 1px solid #000;
+  border-color: #282828;
+  height: 50%;
+}

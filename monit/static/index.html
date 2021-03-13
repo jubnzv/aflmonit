@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8" />
+  <title>AFL Dashboard</title>
+  <link type="text/css" rel="stylesheet" href="style.css" />
+  <link type="text/css" rel="stylesheet" href="/static/css/style.css" />
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.11/vue.js"></script>
+</head>
+
+<body>
+  <div id="app">
+    <table class="main-table">
+      <tr>
+        <td rowspan="2" colspan="2" style="width: 50%; height: 100%; vertical-align: top;">
+          <h3>Fuzzer stats</h3>
+          <p
+            v-if="fuzzer_stats == 'undefined' || Object.keys(fuzzer_stats).length === 0"
+          ></p>
+          <table v-else>
+            <tr>
+              <td>StartTime</td>
+              <td>[[fuzzer_stats.start_time]]</td>
+            </tr>
+            <tr>
+              <td>LastUpdate</td>
+              <td>[[fuzzer_stats.last_update]]</td>
+            </tr>
+            <tr>
+              <td>RunTime</td>
+              <td>[[fuzzer_stats.run_time]]</td>
+            </tr>
+            <tr>
+              <td>FuzzerPid</td>
+              <td>[[fuzzer_stats.fuzzer_pid]]</td>
+            </tr>
+            <tr>
+              <td>CyclesDone</td>
+              <td>[[fuzzer_stats.cycles_done]]</td>
+            </tr>
+            <tr>
+              <td>CyclesWoFinds</td>
+              <td>[[fuzzer_stats.cycles_wo_finds]]</td>
+            </tr>
+            <tr>
+              <td>ExecsDone</td>
+              <td>[[fuzzer_stats.execs_done]]</td>
+            </tr>
+            <tr>
+              <td>ExecsPerSec</td>
+              <td>[[fuzzer_stats.execs_per_sec]]</td>
+            </tr>
+            <tr>
+              <td>ExecsPsLastMin</td>
+              <td>[[fuzzer_stats.execs_ps_last_min]]</td>
+            </tr>
+            <tr>
+              <td>PathsTotal</td>
+              <td>[[fuzzer_stats.paths_total]]</td>
+            </tr>
+            <tr>
+              <td>PathsFavored</td>
+              <td>[[fuzzer_stats.paths_favored]]</td>
+            </tr>
+            <tr>
+              <td>PathsFound</td>
+              <td>[[fuzzer_stats.paths_found]]</td>
+            </tr>
+            <tr>
+              <td>PathsImported</td>
+              <td>[[fuzzer_stats.paths_imported]]</td>
+            </tr>
+            <tr>
+              <td>MaxDepth</td>
+              <td>[[fuzzer_stats.max_depth]]</td>
+            </tr>
+            <tr>
+              <td>CurPath</td>
+              <td>[[fuzzer_stats.cur_path]]</td>
+            </tr>
+            <tr>
+              <td>PendingFavs</td>
+              <td>[[fuzzer_stats.pending_favs]]</td>
+            </tr>
+            <tr>
+              <td>PendingTotal</td>
+              <td>[[fuzzer_stats.pending_total]]</td>
+            </tr>
+            <tr>
+              <td>VariablePaths</td>
+              <td>[[fuzzer_stats.variable_paths]]</td>
+            </tr>
+            <tr>
+              <td>Stability</td>
+              <td>[[fuzzer_stats.stability]]%</td>
+            </tr>
+            <tr>
+              <td>BitmapCvg</td>
+              <td>[[fuzzer_stats.bitmap_cvg]]%</td>
+            </tr>
+            <tr>
+              <td>UniqueCrashes</td>
+              <td>[[fuzzer_stats.unique_crashes]]</td>
+            </tr>
+            <tr>
+              <td>UniqueHangs</td>
+              <td>[[fuzzer_stats.unique_hangs]]</td>
+            </tr>
+            <tr>
+              <td>LastPath</td>
+              <td>[[fuzzer_stats.last_path]]</td>
+            </tr>
+            <tr>
+              <td>LastCrash</td>
+              <td>[[fuzzer_stats.last_crash]]</td>
+            </tr>
+            <tr>
+              <td>LastHang</td>
+              <td>[[fuzzer_stats.last_hang]]</td>
+            </tr>
+            <tr>
+              <td>ExecsSinceCrash</td>
+              <td>[[fuzzer_stats.execs_since_crash]]</td>
+            </tr>
+            <tr>
+              <td>ExecTimeout</td>
+              <td>[[fuzzer_stats.exec_timeout]]</td>
+            </tr>
+            <tr>
+              <td>SlowestExecMs</td>
+              <td>[[fuzzer_stats.slowest_exec_ms]]</td>
+            </tr>
+            <tr>
+              <td>PeakRssMb</td>
+              <td>[[fuzzer_stats.peak_rss_mb]]</td>
+            </tr>
+            <tr>
+              <td>CPUAffinity</td>
+              <td>[[fuzzer_stats.cpu_affinity]]</td>
+            </tr>
+            <tr>
+              <td>EdgesFound</td>
+              <td>[[fuzzer_stats.edges_found]]</td>
+            </tr>
+            <tr>
+              <td>VarByteCount</td>
+              <td>[[fuzzer_stats.var_byte_count]]</td>
+            </tr>
+            <tr>
+              <td>HavocExpansion</td>
+              <td>[[fuzzer_stats.havoc_expansion]]</td>
+            </tr>
+            <tr>
+              <td>AflBanner</td>
+              <td>[[fuzzer_stats.afl_banner]]</td>
+            </tr>
+            <tr>
+              <td>AflVersion</td>
+              <td>[[fuzzer_stats.afl_version]]</td>
+            </tr>
+            <tr>
+              <td>TargetMode</td>
+              <td>[[fuzzer_stats.target_mode]]</td>
+            </tr>
+            <tr>
+              <td>CommandLine</td>
+              <td>[[fuzzer_stats.command_line]]</td>
+            </tr>
+          </table>
+        </td>
+
+        <td style="vertical-align: top">
+          <h3>Crashes</h3>
+          <p v-if="crashes == 'undefined' || Object.keys(crashes).length === 0">
+            No crashes found.
+          </p>
+          <div v-else id="scrollable-list">
+            <ul v-for="crash in crashes">
+              <li style="list-style-type: none">
+                <a :href="`/crashes/${crash.filename}`"
+                  >crash_[[crash.filename]]</a
+                >
+              </li>
+            </ul>
+          </div>
+        </td>
+      </tr>
+
+      <tr style="width: 50%; height: 50%">
+        <td style="vertical-align: top">
+          <h3>Hangs</h3>
+          <p v-if="hangs == 'undefined' || Object.keys(hangs).length === 0" style="heigh: 50%">
+            No hangs found.
+          </p>
+          <div v-else id="scrollable-list">
+            <ul v-for="hang in hangs">
+              <li style="list-style-type: none">
+                <a :href="`/hangs/${hang.filename}`">hang_[[hang.filename]]</a>
+              </li>
+            </ul>
+          </div>
+        </td>
+      </tr>
+    </table>
+  </div>
+</body>
+
+<!-- Our View App goes at the end of the document -->
+<script type="module" src="/app.js"></script>
