@@ -1,17 +1,23 @@
 # aflmonit
 
-A simple dashboard for the [AFL](https://github.com/google/AFL) that is assembled into a single binary using [embed](https://golang.org/pkg/embed/) feature from Go 1.16.
+A simple dashboard for the [AFL](https://github.com/google/AFL) fuzzer.
+
+The utility is assembled into a single binary using [embed](https://golang.org/pkg/embed/) feature from Go 1.16. This makes it convenient to deploy it.
+
+## Building from source
+
+```bash
+git clone https://github.com/jubnzv/aflmonit
+cd aflmonit
+go build ./cmd/monit/aflmonit.go
+```
 
 ## Usage
 
-```
-usage: aflmonit [<flags>]
+Transfer the `aflmonit` binary to the server and run it, specifying the path to the AFL output directory:
 
-Flags:
-  --help                Show context-sensitive help (also try --help-long and --help-man).
-  --debug               Enable additional output
-  --path="."            Path to AFL directory
-  --hostname="0.0.0.0"  Server hostname
-  --port=PORT           Server port
-  --version             Show application version.
+```bash
+./aflmonit --path=/home/test/output
 ```
+
+See the full list of the options with `aflmonit --help`.
