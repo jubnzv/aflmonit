@@ -16,8 +16,7 @@ type aflServer struct {
 	fileManager *AflFileManager
 }
 
-func NewServer(aflPath string) *aflServer {
-	fm := NewAflFileManager(aflPath)
+func NewServer(fm *AflFileManager) *aflServer {
 	return &aflServer{fileManager: fm}
 }
 
@@ -76,13 +75,19 @@ func (s *aflServer) hangsHandler(w http.ResponseWriter, req *http.Request) {
 func StartServer(aflPath string, address string, port uint16, debug bool) {
 	log.Printf("Starting server on http://%s:%d/ (path=%s debug=%t)", address, port, aflPath, debug)
 
+	fm, err := NewAflFileManager(aflPath)
+	if err != nil {
+		panic(err)
+	}
+
 	fsys, err := fs.Sub(embeddedFiles, "static")
 	if err != nil {
 		panic(err)
 	}
 
+	server := NewServer(fm)
+
 	mux := http.NewServeMux()
-	server := NewServer(aflPath)
 	mux.Handle("/", http.FileServer(http.FS(fsys)))
 	mux.Handle("/crashes/", http.StripPrefix("/crashes", http.FileServer(http.Dir(server.fileManager.CrashesPath()))))
 	mux.Handle("/hangs/", http.StripPrefix("/hangs", http.FileServer(http.Dir(server.fileManager.HangsPath()))))

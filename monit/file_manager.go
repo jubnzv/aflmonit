@@ -1,37 +1,51 @@
 package monit
 
 import (
+	"errors"
 	"fmt"
 	"io/ioutil"
+	"os"
 	"path/filepath"
 	"strconv"
 	"strings"
 )
 
 type AflFileManager struct {
-	Basedir string
+	outputDir string // Output directory of AFL fuzzer
 }
 
-func NewAflFileManager(basedir string) *AflFileManager {
+func NewAflFileManager(basedir string) (*AflFileManager, error) {
 	fm := &AflFileManager{}
-	fm.Basedir = basedir
-	return fm
+	fm.outputDir = basedir
+	if err := fm.verifyPath(); err != nil {
+		return nil, err
+	}
+	if _, err := fm.ReadStatsFile(); err != nil {
+		return nil, err
+	}
+	return fm, nil
 }
 
-func (m AflFileManager) OutputDir() string {
-	return filepath.Join(m.Basedir, "output")
+// verifyPath verifies that the path contains all the necessary files.
+func (m AflFileManager) verifyPath() error {
+	for _, filename := range []string{m.outputDir, m.StatsPath(), m.CrashesPath(), m.HangsPath()} {
+		if _, err := os.OpenFile(filename, os.O_RDONLY, 0644); errors.Is(err, os.ErrNotExist) {
+			return err
+		}
+	}
+	return nil
 }
 
 func (m AflFileManager) StatsPath() string {
-	return filepath.Join(m.OutputDir(), "fuzzer_stats")
+	return filepath.Join(m.outputDir, "fuzzer_stats")
 }
 
 func (m AflFileManager) CrashesPath() string {
-	return filepath.Join(m.OutputDir(), "crashes")
+	return filepath.Join(m.outputDir, "crashes")
 }
 
 func (m AflFileManager) HangsPath() string {
-	return filepath.Join(m.OutputDir(), "hangs")
+	return filepath.Join(m.outputDir, "hangs")
 }
 
 func (m AflFileManager) ReadStatsFile() (*AflStats, error) {

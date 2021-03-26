@@ -225,7 +225,119 @@ func ParseStats(data string) (*AflStats, error) {
 	// TODO: Actually have a lookup and tell the user which fields were
 	// missing
 	if fieldsCovered != 137438953471 {
-		return nil, fmt.Errorf("missing fields in stats")
+		msg := []string{"missing fields in stats:"}
+		if (fieldsCovered & (1 << 0)) == 0 {
+			msg = append(msg, "start_time")
+		}
+		if (fieldsCovered & (1 << 1)) == 0 {
+			msg = append(msg, "last_update")
+		}
+		if (fieldsCovered & (1 << 2)) == 0 {
+			msg = append(msg, "run_time")
+		}
+		if (fieldsCovered & (1 << 3)) == 0 {
+			msg = append(msg, "fuzzer_pid")
+		}
+		if (fieldsCovered & (1 << 4)) == 0 {
+			msg = append(msg, "cycles_done")
+		}
+		if (fieldsCovered & (1 << 5)) == 0 {
+			msg = append(msg, "cycles_wo_finds")
+		}
+		if (fieldsCovered & (1 << 6)) == 0 {
+			msg = append(msg, "execs_done")
+		}
+		if (fieldsCovered & (1 << 7)) == 0 {
+			msg = append(msg, "execs_per_sec")
+		}
+		if (fieldsCovered & (1 << 8)) == 0 {
+			msg = append(msg, "execs_ps_last_min")
+		}
+		if (fieldsCovered & (1 << 9)) == 0 {
+			msg = append(msg, "paths_total")
+		}
+		if (fieldsCovered & (1 << 10)) == 0 {
+			msg = append(msg, "paths_favored")
+		}
+		if (fieldsCovered & (1 << 11)) == 0 {
+			msg = append(msg, "paths_found")
+		}
+		if (fieldsCovered & (1 << 12)) == 0 {
+			msg = append(msg, "paths_imported")
+		}
+		if (fieldsCovered & (1 << 13)) == 0 {
+			msg = append(msg, "max_depth")
+		}
+		if (fieldsCovered & (1 << 14)) == 0 {
+			msg = append(msg, "cur_path")
+		}
+		if (fieldsCovered & (1 << 15)) == 0 {
+			msg = append(msg, "pending_favs")
+		}
+		if (fieldsCovered & (1 << 16)) == 0 {
+			msg = append(msg, "pending_total")
+		}
+		if (fieldsCovered & (1 << 17)) == 0 {
+			msg = append(msg, "variable_paths")
+		}
+		if (fieldsCovered & (1 << 18)) == 0 {
+			msg = append(msg, "stability")
+		}
+		if (fieldsCovered & (1 << 19)) == 0 {
+			msg = append(msg, "bitmap_cvg")
+		}
+		if (fieldsCovered & (1 << 20)) == 0 {
+			msg = append(msg, "unique_crashes")
+		}
+		if (fieldsCovered & (1 << 21)) == 0 {
+			msg = append(msg, "unique_hangs")
+		}
+		if (fieldsCovered & (1 << 22)) == 0 {
+			msg = append(msg, "last_path")
+		}
+		if (fieldsCovered & (1 << 23)) == 0 {
+			msg = append(msg, "last_crash")
+		}
+		if (fieldsCovered & (1 << 24)) == 0 {
+			msg = append(msg, "last_hang")
+		}
+		if (fieldsCovered & (1 << 25)) == 0 {
+			msg = append(msg, "execs_since_crash")
+		}
+		if (fieldsCovered & (1 << 26)) == 0 {
+			msg = append(msg, "exec_timeout")
+		}
+		if (fieldsCovered & (1 << 27)) == 0 {
+			msg = append(msg, "slowest_exec_ms")
+		}
+		if (fieldsCovered & (1 << 28)) == 0 {
+			msg = append(msg, "peak_rss_mb")
+		}
+		if (fieldsCovered & (1 << 29)) == 0 {
+			msg = append(msg, "cpu_affinity")
+		}
+		if (fieldsCovered & (1 << 30)) == 0 {
+			msg = append(msg, "edges_found")
+		}
+		if (fieldsCovered & (1 << 31)) == 0 {
+			msg = append(msg, "var_byte_count")
+		}
+		if (fieldsCovered & (1 << 32)) == 0 {
+			msg = append(msg, "havoc_expansion")
+		}
+		if (fieldsCovered & (1 << 33)) == 0 {
+			msg = append(msg, "afl_banner")
+		}
+		if (fieldsCovered & (1 << 34)) == 0 {
+			msg = append(msg, "afl_version")
+		}
+		if (fieldsCovered & (1 << 35)) == 0 {
+			msg = append(msg, "target_mode")
+		}
+		if (fieldsCovered & (1 << 36)) == 0 {
+			msg = append(msg, "command_line")
+		}
+		return nil, fmt.Errorf(strings.Join(msg, " "))
 	}
 
 	return &AflStats{
